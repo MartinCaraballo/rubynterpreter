@@ -19,7 +19,9 @@ rule
     | exp { val[0] }
 
   stmt
-    : ID '=' exp ';'
+    : exp ';'
+      { ExprStmt.new(val[0]) }
+    | ID '=' exp ';'
       { Assignment.new(val[0], val[2]) }
     | '{' stmts '}'
       { Block.new(val[1]) }
@@ -33,8 +35,6 @@ rule
       { WhileDo.new(val[2], val[4]) }
     | 'print' '(' exp ')' ';'
       { PrintStmt.new(val[2]) }
-    | exp ';'
-      { ExprStmt.new(val[0]) }
   stmts 
     : stmt
       { [val[0]] }

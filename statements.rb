@@ -8,6 +8,24 @@ class Statement
   end
 end
 
+class ExprStmt < Statement
+
+  def initialize(expression)
+    @expression = expression
+  end
+
+  def evaluate(state = {})
+    expression.evaluate(state)
+    state
+  end
+
+  def unparse()
+    "#{expression.unparse()};"
+  end
+
+  attr_reader :expression
+end
+
 class Assignment < Statement 
   def initialize(identifier, expression)
     @identifier = identifier
