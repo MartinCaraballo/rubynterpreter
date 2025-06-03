@@ -25,6 +25,28 @@ class VariableExp < Expression
   attr_reader :identifier
 end
 
+class FunctionCall < Expression
+  def initialize(identifier, args)
+    @identifier = identifier
+    @args = args
+  end
+
+  def unparse()
+    "#{identifier}(#{unparse_args(args)})"
+  end
+
+  def evaluate(state = {})
+    puts(args)
+    if args.length() > 0
+      state[identifier].evaluate_call(args)
+    else
+      state[identifier].evaluate_call
+    end
+  end
+
+  attr_reader :identifier
+  attr_reader :args
+end
 
 class Numeral < Expression
   def initialize(value)
@@ -314,7 +336,6 @@ class ComparisonLessThanOrEqual < Expression
   attr_reader :left
   attr_reader :right
 end
-
 
 class TruthValue < Expression
 

@@ -44,7 +44,6 @@ class Assignment < Statement
   attr_reader :expression
 end
 
-
 class Block < Statement
   def initialize(statements = [])
     @statements = statements
@@ -112,19 +111,19 @@ class WhileDo < Statement
   attr_reader :body
 end
 
-class PrintStmt < Statement
-  def initialize(expression)
-    @expression = expression
-  end
-  
-  def unparse()
-    "print (#{expression.unparse});"    
-  end
-
-  def evaluate(state = {})
-    puts (expression.evaluate(state))
-    state
-  end
-
-  attr_reader :expression
-end
+# class PrintStmt < Statement
+#   def initialize(expression)
+#     @expression = expression
+#   end
+#
+#   def unparse()
+#     "print (#{expression.unparse});"    
+#   end
+#
+#   def evaluate(state = {})
+#     puts (expression.evaluate(state))
+#     state
+#   end
+#
+#   attr_reader :expression
+# end

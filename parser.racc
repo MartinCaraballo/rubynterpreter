@@ -33,15 +33,18 @@ rule
       { IfThenElse.new(val[2], val[4], nil) }
     | 'while' '(' exp ')' stmt
       { WhileDo.new(val[2], val[4]) }
-    | 'print' '(' exp ')' ';'
-      { PrintStmt.new(val[2]) }
+
   stmts 
     : stmt
       { [val[0]] }
     | stmts stmt
       { val[0] << val[1] }
   exp
-    : ID
+    : ID '(' ')'
+      { FunctionCall.new(val[0], []) }
+    | ID '(' args ')'
+      { FunctionCall.new(val[0], val[2]) }
+    | ID
       { VariableExp.new(val[0]) }
     | NUM
       { Numeral.new(val[0]) }
@@ -78,6 +81,10 @@ rule
     | '(' exp ')'
       { val[1] }
 
+  args
+    : exp { [val[0]] }
+    | args ',' exp { val[0] + [val[2]]}
+
 end
 
 ---- header ----
@@ -89,9 +96,9 @@ require_relative 'statements'
 class Lexer
   NUMBER = /\d+(\.\d+)?/
   BOOL = /true|false/
-  KEYWORDS = /if|else|while|print/
+  KEYWORDS = /if|else|while/
   ID = /[a-zA-Z_]\w*/
-  OPERS = /[-+*\/(){};]|[!=<>]=?|&&|\|\|/
+  OPERS = /[-+*\/(){};,]|[!=<>]=?|&&|\|\|/
   IGNORE = /(\/\/.*(\n|$)|\s)+/
   
   def initialize(input)
