@@ -19,7 +19,9 @@ rule
     | exp { val[0] }
 
   stmt
-    : exp ';'
+    : 'function' ID '(' ids ')' '{' stmts '}' {...}
+    | 'function' ID '(' ')' '{' stmts '}' ; {...}
+    | exp ';'
       { ExprStmt.new(val[0]) }
     | ID '=' exp ';'
       { Assignment.new(val[0], val[2]) }
@@ -85,6 +87,10 @@ rule
     : exp { [val[0]] }
     | args ',' exp { val[0] + [val[2]]}
 
+  ids 
+    : ID { [val[0]] }
+    | ids ',' ID { val[0] + [val[2]] }
+
 end
 
 ---- header ----
@@ -96,7 +102,7 @@ require_relative 'statements'
 class Lexer
   NUMBER = /\d+(\.\d+)?/
   BOOL = /true|false/
-  KEYWORDS = /if|else|while/
+  KEYWORDS = /if|else|while|function/
   ID = /[a-zA-Z_]\w*/
   OPERS = /[-+*\/(){};,]|[!=<>]=?|&&|\|\|/
   IGNORE = /(\/\/.*(\n|$)|\s)+/

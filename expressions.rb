@@ -126,7 +126,7 @@ class Minus < Expression
   end
 
   def evaluate(state = {})
-    -value.evaluate()
+    -value.evaluate(state)
   end
 
   attr_reader :value

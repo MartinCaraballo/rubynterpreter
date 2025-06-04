@@ -8,6 +8,20 @@ class FunctionImpl
   end
 end
 
+class FunctionDef < FunctionImpl
+
+  def initialize(name, arg_names, body)
+    @name = name
+    @arg_names = arg_names
+    @body = body
+  end
+
+  def evaluate_call()
+    @body.evaluate()
+  end
+
+end
+
 class FunctionMax < FunctionImpl
   def initialize()
     super('max')
