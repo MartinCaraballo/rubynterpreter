@@ -36,7 +36,6 @@ class FunctionCall < Expression
   end
 
   def evaluate(state = {})
-    puts(args)
     if args.length() > 0
       state[identifier].evaluate_call(args)
     else
@@ -118,21 +117,19 @@ class Subtraction < Expression
 end
 
 class Minus < Expression
-  def initialize(left, right)
-    @left = left
-    @right = right
+  def initialize(value)
+    @value = value
   end
 
   def unparse()
-    "(#{left.unparse()} - #{right.unparse()})"
+    "(- #{value.unparse()})"
   end
 
   def evaluate(state = {})
-    left.evaluate(state) - right.evaluate(state)
+    -value.evaluate()
   end
 
-  attr_reader :left
-  attr_reader :right
+  attr_reader :value
 end
 
 class LogicalOr < Expression
