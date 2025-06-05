@@ -19,8 +19,10 @@ rule
     | exp { val[0] }
 
   stmt
-    : 'function' ID '(' ids ')' '{' stmts '}' {...}
-    | 'function' ID '(' ')' '{' stmts '}' ; {...}
+    : 'function' ID '(' ids ')' '{' stmts '}'
+      { FunctionDef.new(val[1], val[3], val[6]) }
+    | 'function' ID '(' ')' '{' stmts '}'
+      { FunctionDef.new(val[1], [], val[5]) }
     | exp ';'
       { ExprStmt.new(val[0]) }
     | ID '=' exp ';'

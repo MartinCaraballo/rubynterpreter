@@ -16,8 +16,29 @@ class FunctionDef < FunctionImpl
     @body = body
   end
 
-  def evaluate_call()
-    @body.evaluate()
+  def evaluate_call(args)
+    state = {}
+    @arg_names.each_with_index do |arg, index|
+      state[arg] = args[index].evaluate()
+    end
+    
+    results = []
+    for statement in @body do
+      results.push(statement.evaluate(state))
+    end
+    results
+  end
+
+  def unparse()
+    body = ""
+    for stmt in @body do
+      body += "#{stmt.unparse}"
+    end
+    "#{@name}(#{@arg_names} { #{body} })"
+  end
+
+  def evaluate(state)
+    state[@name] = self
   end
 
 end
@@ -106,6 +127,22 @@ class FunctionPrint < FunctionImpl
 
 end
 
+class FunctionSum < FunctionImpl
+
+  def initialize()
+    super("sum")
+  end
+
+  def evaluate_call(args)
+    sum = 0
+    for arg in args do
+      sum += arg.evaluate()
+    end
+    sum
+  end
+
+end
+
 def initialize_functions(state)
   state["max"] = FunctionMax.new
   state["abs"] = FunctionAbs.new
@@ -114,6 +151,7 @@ def initialize_functions(state)
   state["pi"] = FunctionPi.new
   state["random"] = FunctionRandom.new
   state["print"] = FunctionPrint.new
+  state["sum"] = FunctionSum.new
 end
 
 def unparse_args(args)
